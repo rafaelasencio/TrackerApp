@@ -31,6 +31,8 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0) //Fix area covered by the search bar
         
+        searchBar.becomeFirstResponder() //Showing keyboard on app launch
+        
         //Registering nib file for use in code
         var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier:
