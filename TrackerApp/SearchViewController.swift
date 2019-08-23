@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
+    var dataTask: URLSessionDataTask?
     
     //MARK:- Structs
     struct TableView {
@@ -38,16 +39,6 @@ class SearchViewController: UIViewController {
         let urlString = String(format: "https://itunes.apple.com/search?term=%@&limit=200", encodedText)
         let url = URL(string: urlString)
         return url!
-    }
-        // Performing the search request
-    func performStoreRequest(with url: URL) -> Data? {
-        do {
-            return try Data(contentsOf: url)
-        } catch {
-            print("Download Error: \(error.localizedDescription)")
-            showNetworkError() //Error handling
-            return nil
-        }
     }
         // Parsing the JSON data
     func parse(data: Data) -> [SearchResult] {
@@ -102,25 +93,43 @@ extension SearchViewController: UISearchBarDelegate {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder() //Dismissing keyboard on search
             hasSearched = true
+            dataTask?.cancel()
             isLoading = true
             tableView.reloadData()
             searchResults = []
-                //Putting the web request in a background thread
-            let queue = DispatchQueue.global()
-            queue.async {
-                // code that needs to run in the background
-                let url = self.iTunesURL(searchText: searchBar.text!)
-                if let data = self.performStoreRequest(with: url) {
-                    self.searchResults = self.parse(data: data)
-                    self.searchResults.sort(by: orderedAscending) //Sort array result
-                    DispatchQueue.main.async {
-                        // update the user interface
-                        self.isLoading = false
-                        self.tableView.reloadData()
-                    }
+                //URL Session
+            let url = iTunesURL(searchText: searchBar.text!)
+            let session = URLSession.shared
+            dataTask = session.dataTask(with: url) { (data, response, error) in
+                if let error = error as NSError?, error.code == -999 {
+                    print("Failure! \(error.localizedDescription)")
                     return
+                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                    print("Success! \(data!)")
+                    //Parsing the data
+                    if let data = data {
+                        /* This unwraps the optional object from the data parameter and then calls parse(data:)
+                         to turn the dictionary’s contents into SearchResult objects*/
+                        self.searchResults = self.parse(data: data)
+                        self.searchResults.sort(by: orderedAscending)
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        return
+                    }
+                } else {
+                    print("Failure! \(response!)")
+                }
+                DispatchQueue.main.async {
+                    // if something went wrong
+                    self.hasSearched = false
+                    self.isLoading = false
+                    self.tableView.reloadData()
+                    self.showNetworkError()
                 }
             }
+            dataTask?.resume()
         }
     }
     //Extending search bar to status area
