@@ -26,6 +26,27 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="UUn-FI-bAY"/>
                                 </connections>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJM-qf-UZv">
+                                <rect key="frame" x="0.0" y="76" width="320" height="44"/>
+                                <items>
+                                    <navigationItem id="wlA-On-D4S">
+                                        <nil key="title"/>
+                                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="ws4-4X-nzn">
+                                            <rect key="frame" x="10" y="7" width="300" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="All"/>
+                                                <segment title="Music"/>
+                                                <segment title="Software"/>
+                                                <segment title="E-books"/>
+                                            </segments>
+                                            <connections>
+                                                <action selector="segmentChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="IHM-bR-vJe"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                             <searchBar contentMode="redraw" placeholder="App name, artist, song, album, e-book" translatesAutoresizingMaskIntoConstraints="NO" id="XqY-X8-hvv">
                                 <rect key="frame" x="0.0" y="20" width="320" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -39,15 +60,19 @@
                             <constraint firstItem="XqY-X8-hvv" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Jon-or-GyW"/>
                             <constraint firstItem="XqY-X8-hvv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="NSB-ji-EFZ"/>
                             <constraint firstItem="cnU-p4-DVK" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="SB4-ve-eHu"/>
+                            <constraint firstItem="KJM-qf-UZv" firstAttribute="top" secondItem="XqY-X8-hvv" secondAttribute="bottom" id="dWX-kq-ocF"/>
                             <constraint firstItem="XqY-X8-hvv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="gZD-Kk-iQE"/>
                             <constraint firstItem="cnU-p4-DVK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gty-qy-EzC"/>
                             <constraint firstItem="cnU-p4-DVK" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jx2-jZ-EkR"/>
                             <constraint firstItem="cnU-p4-DVK" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tFu-ZE-SFK"/>
+                            <constraint firstItem="KJM-qf-UZv" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="uEq-0s-4vF"/>
+                            <constraint firstItem="KJM-qf-UZv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="xZN-g9-gn9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="searchBar" destination="XqY-X8-hvv" id="Rgz-Lg-hVF"/>
+                        <outlet property="segmentedControl" destination="ws4-4X-nzn" id="L8F-2b-QDV"/>
                         <outlet property="tableView" destination="cnU-p4-DVK" id="CS7-h9-xNK"/>
                     </connections>
                 </viewController>
